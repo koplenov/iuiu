@@ -7376,12 +7376,21 @@ var $;
         is_operator(id) {
             return null;
         }
+        author(id) {
+            return "Ivan!";
+        }
         message_text(id) {
             return "blank";
         }
+        Answer_paragraph(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.message_text(id);
+            return obj;
+        }
         Message_card(id) {
             const obj = new this.$.$mol_card();
-            obj.title = () => this.message_text(id);
+            obj.title = () => this.author(id);
+            obj.status = () => this.Answer_paragraph(id);
             return obj;
         }
     }
@@ -7423,6 +7432,9 @@ var $;
     ], $team.prototype, "Draft_send", null);
     __decorate([
         $mol_mem_key
+    ], $team.prototype, "Answer_paragraph", null);
+    __decorate([
+        $mol_mem_key
     ], $team.prototype, "Message_card", null);
     $.$team = $team;
     class $team_positioned_view extends $mol_view {
@@ -7443,7 +7455,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("team/view.tree.css", "[team_message] {\n\tpadding-top: 1rem;\n}\n\n[team_positioned_message] {\n\tjustify-content: end;\n}\n");
+    $mol_style_attach("team/view.tree.css", "[team_message] {\n\tpadding-top: 1rem;\n}\n\n[team_positioned_message] {\n\tjustify-content: end;\n}\n\n[mol_card_status] {\n\ttext-transform: unset;\n}\n");
 })($ || ($ = {}));
 //team/-css/view.tree.css.ts
 ;
@@ -7489,8 +7501,8 @@ var $;
                 if (!this.draft_text().trim())
                     return;
                 const message = this.draft_text();
-                this.text_messages([...this.text_messages(), { is_operator: true, message }]);
-                const res = $mol_fetch.json(this.api(), {
+                this.text_messages([...this.text_messages(), { id: Date.now(), author: "You", is_operator: true, message }]);
+                const { employee, result } = $mol_fetch.json(this.api(), {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                     },
@@ -7498,7 +7510,71 @@ var $;
                     "method": "POST",
                     mode: "cors"
                 });
-                console.log(res);
+                const get_normal_name = (employee) => {
+                    switch (employee) {
+                        case "ayment_issue":
+                            return "решения проблем с оплатой";
+                        case "create_account":
+                            return "создания учетных записей";
+                        case "contact_customer_service":
+                            return "обращения в службу поддержки клиентов";
+                        case "get_invoice":
+                            return "получения счетов";
+                        case "track_order":
+                            return "отслеживания заказов";
+                        case "get_refund":
+                            return "возврата средств";
+                        case "contact_human_agent":
+                            return "обращения к человеку в службе поддержки";
+                        case "recover_password":
+                            return "восстановления паролей";
+                        case "change_order":
+                            return "изменения заказов";
+                        case "delete_account":
+                            return "удаления учетных записей";
+                        case "complaint":
+                            return "жалоб";
+                        case "check_invoices":
+                            return "проверки счетов";
+                        case "review":
+                            return "обзоров";
+                        case "check_refund_policy":
+                            return "проверки политики возврата";
+                        case "delivery_options":
+                            return "вариантов доставки";
+                        case "check_cancellation_fee":
+                            return "проверки штрафов за отмену";
+                        case "track_refund":
+                            return "отслеживания возвратов средств";
+                        case "check_payment_methods":
+                            return "проверки методов оплаты";
+                        case "switch_account":
+                            return "переключения учетных записей";
+                        case "newsletter_subscription":
+                            return "подписки на рассылку";
+                        case "delivery_period":
+                            return "периода доставки";
+                        case "edit_account":
+                            return "редактирования учетных записей";
+                        case "registration_problems":
+                            return "проблем с регистрацией";
+                        case "change_shipping_address":
+                            return "изменения адресов доставки";
+                        case "set_up_shipping_address":
+                            return "настройки адресов доставки";
+                        case "place_order":
+                            return "размещения заказов";
+                        case "cancel_order":
+                            return "отмены заказов";
+                        case "check_invoicecheck_invoice":
+                            return "проверки счетов";
+                        default:
+                            return employee;
+                    }
+                };
+                const answer_message = `Спасибо за обращение в тех. поддержку! Я из отдела ${get_normal_name(result)}, меня зовут ${employee}!`;
+                this.text_messages([...this.text_messages(), { id: Date.now(), author: employee, is_operator: false, message: answer_message }]);
+                this.text_messages([...this.text_messages(), { id: Date.now(), author: employee, is_operator: false, message: "Пару минут, ознакомлюсь с вашим вопросом." }]);
                 this.draft_text("");
             }
             messages() {
@@ -7512,6 +7588,9 @@ var $;
             }
             is_operator(data) {
                 return data.is_operator;
+            }
+            author(data) {
+                return data.author;
             }
         }
         __decorate([
@@ -7535,6 +7614,9 @@ var $;
         __decorate([
             $mol_mem
         ], $team.prototype, "is_operator", null);
+        __decorate([
+            $mol_mem
+        ], $team.prototype, "author", null);
         $$.$team = $team;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
