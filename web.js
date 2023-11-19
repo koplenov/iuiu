@@ -7453,6 +7453,9 @@ var $;
     var $$;
     (function ($$) {
         class $team extends $.$team {
+            api() {
+                return "https://3977-149-40-49-209.ngrok-free.app/rusult";
+            }
             auto() {
                 this.speech_to_text();
             }
@@ -7487,6 +7490,15 @@ var $;
                     return;
                 const message = this.draft_text();
                 this.text_messages([...this.text_messages(), { is_operator: true, message }]);
+                const res = $mol_fetch.json(this.api(), {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: `user_query=${encodeURIComponent(message)}`,
+                    "method": "POST",
+                    "mode": "cors"
+                });
+                console.log(res);
                 this.draft_text("");
             }
             messages() {
@@ -7508,6 +7520,9 @@ var $;
         __decorate([
             $mol_mem
         ], $team.prototype, "speech_index", null);
+        __decorate([
+            $mol_action
+        ], $team.prototype, "draft_send", null);
         __decorate([
             $mol_mem
         ], $team.prototype, "messages", null);
