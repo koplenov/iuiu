@@ -7454,7 +7454,7 @@ var $;
     (function ($$) {
         class $team extends $.$team {
             api() {
-                return "https://3977-149-40-49-209.ngrok-free.app/rusult";
+                return "https://3977-149-40-49-209.ngrok-free.app/result";
             }
             auto() {
                 this.speech_to_text();
@@ -7496,7 +7496,7 @@ var $;
                     },
                     body: `user_query=${encodeURIComponent(message)}`,
                     "method": "POST",
-                    "mode": "cors"
+                    mode: "cors"
                 });
                 console.log(res);
                 this.draft_text("");
