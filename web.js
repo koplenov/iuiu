@@ -7478,7 +7478,7 @@ var $;
     (function ($$) {
         class $team extends $.$team {
             api() {
-                return "https://3977-149-40-49-209.ngrok-free.app/result";
+                return "https://d0d6-94-141-126-199.ngrok-free.app/result";
             }
             auto() {
                 this.speech_to_text();
